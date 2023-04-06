@@ -1139,6 +1139,80 @@ jQuery(document).ready(function () {
             jdd.highlightPrevDiff();
         }
     });
+
+  $('#base').on('change', function() {
+    var fileList = $(this)[0].files;
+    $('#base-list').empty();
+    for (var i = 0; i < fileList.length; i++) {
+      var fileName = fileList[i].name;
+      $('#base-list').append($('<li>').text(fileName));
+    }
+  });
+
+  $('#current').on('change', function() {
+    var fileList = $(this)[0].files;
+    $('#current-list').empty();
+    for (var i = 0; i < fileList.length; i++) {
+      var fileName = fileList[i].name;
+      $('#current-list').append($('<li>').text(fileName));
+    }
+  });
+
+  $('body').on('click', 'li', function() {
+    // clears the previous diff view
+
+    jdd.setupNewDiff();
+    $('#textarearight').val('');
+    $('#textarealeft').val('');
+    $('#errorLeft').text('').hide();
+    $('#textarealeft').removeClass('error');
+    $('#errorRight').text('').hide();
+    $('#textarearight').removeClass('error');
+
+    var fileName = $(this).text();
+    console.log('fileName', fileName);
+    var baseFile = null;
+    var currentFile = null;
+    var baseFileList = $('#base')[0].files;
+    var currentFileList = $('#current')[0].files;
+    for (var i = 0; i < baseFileList.length; i++) {
+      if (baseFileList[i].name === fileName) {
+        baseFile = baseFileList[i];
+        break;
+      }
+    }
+    for (var i = 0; i < currentFileList.length; i++) {
+      if (currentFileList[i].name === fileName) {
+        currentFile = currentFileList[i];
+        break;
+      }
+    }
+    if (baseFile) {
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var content = event.target.result;
+        console.log('Inserting Base file content:');
+        $('#textarealeft').val(content);
+
+      };
+      reader.readAsText(baseFile);
+    } else {
+      $('#errorLeft').text('No matching json file found').show();
+      $('#textarealeft').addClass('error');
+    }
+    if (currentFile) {
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var content = event.target.result;
+        console.log('Inserting Current file content:');
+        $('#textarearight').val(content);
+      };
+      reader.readAsText(currentFile);
+    } else {
+      $('#errorRight').text('No matching json file found').show();
+      $('#textarearight').addClass('error');
+    }
+  });
 });
 
 // polyfills

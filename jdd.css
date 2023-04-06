@@ -27,9 +27,40 @@ a {
 a:hover {
     text-decoration: underline;
 }
+.file-uploader{
+  display: flex;
+  flex-direction: row;
+}
+.file-uploader-column{
+  flex: 1;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: row;
+}
+
+.file-list-column {
+  flex: 1;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.file-list li {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.file-list li:hover {
+  background-color: #eee;
+}
+
 
 #main {
-    margin: 25px auto;
+  margin: 25px auto;
     width: 95%
 }
 
